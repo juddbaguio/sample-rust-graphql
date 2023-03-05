@@ -61,13 +61,11 @@ pub struct RootMutation(StudentMutation);
 pub type StudentsSchema = Schema<RootQuery, RootMutation, EmptySubscription>;
 
 pub fn init_schema(ctx: StudentsCtx) -> StudentsSchema {
-    let schema = Schema::build(
+    Schema::build(
         RootQuery::default(),
         RootMutation::default(),
         EmptySubscription,
     )
     .data(ctx)
-    .finish();
-
-    schema
+    .finish()
 }

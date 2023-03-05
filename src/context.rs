@@ -74,7 +74,7 @@ impl StudentsCtx {
             key.clone(),
             Student {
                 id: key.clone(),
-                full_name: name.clone().to_string(),
+                full_name: name.to_string(),
             },
         );
 
