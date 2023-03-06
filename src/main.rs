@@ -1,5 +1,6 @@
-mod context;
+mod models;
 mod schema;
+mod services;
 
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
@@ -9,9 +10,10 @@ use axum::{
     routing::get,
     Router, Server,
 };
-use context::StudentsCtx;
 use schema::init_schema;
 use schema::StudentsSchema;
+
+use crate::services::new_student_service;
 
 async fn graphql_handler(
     schema: Extension<StudentsSchema>,
@@ -26,7 +28,7 @@ async fn graphiql() -> impl IntoResponse {
 
 #[tokio::main]
 async fn main() {
-    let students_ctx = StudentsCtx::new();
+    let students_ctx = new_student_service().await;
     let schema = init_schema(students_ctx);
 
     let app = Router::new()
