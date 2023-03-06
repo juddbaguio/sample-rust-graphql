@@ -2,31 +2,18 @@ use async_graphql::{Context, EmptySubscription, MergedObject, Object, Schema};
 
 use crate::context::{Student, StudentsCtx};
 
-pub struct StudentObj(pub Student);
-
-#[Object]
-impl StudentObj {
-    async fn id(&self) -> &String {
-        &self.0.id
-    }
-
-    async fn full_name(&self) -> &str {
-        self.0.full_name.as_str()
-    }
-}
-
 #[derive(Default)]
 pub struct StudentQuery;
 
 #[Object]
 impl StudentQuery {
-    async fn get_students<'ctx>(&self, ctx: &Context<'ctx>) -> Vec<StudentObj> {
+    async fn get_students<'ctx>(&self, ctx: &Context<'ctx>) -> Vec<Student> {
         let students_ctx = ctx.data::<StudentsCtx>().unwrap();
 
         students_ctx.get_students()
     }
 
-    async fn get_student_by_id<'ctx>(&self, ctx: &Context<'ctx>, id: String) -> Option<StudentObj> {
+    async fn get_student_by_id<'ctx>(&self, ctx: &Context<'ctx>, id: String) -> Option<Student> {
         let students_ctx = ctx.data::<StudentsCtx>().unwrap();
 
         students_ctx.student_by_id(id)
@@ -42,7 +29,7 @@ impl StudentMutation {
         &self,
         ctx: &Context<'ctx>,
         name: String,
-    ) -> Result<StudentObj, String> {
+    ) -> Result<Student, String> {
         let students_ctx = ctx.data::<StudentsCtx>().unwrap();
         if let Ok(stud) = students_ctx.add_student(name.as_str()) {
             return Ok(stud);
