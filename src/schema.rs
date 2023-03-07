@@ -1,6 +1,7 @@
 use async_graphql::{EmptySubscription, MergedObject, Schema};
 
 use crate::{
+    middleware,
     models::student::{StudentMutation, StudentQuery},
     services::student::StudentsCtx,
 };
@@ -19,6 +20,7 @@ pub fn init_schema(ctx: StudentsCtx) -> StudentsSchema {
         RootMutation::default(),
         EmptySubscription,
     )
+    .extension(middleware::HeaderMiddleware)
     .data(ctx)
     .finish()
 }

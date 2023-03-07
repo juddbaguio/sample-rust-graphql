@@ -1,2 +1,2 @@
 dev:
-	cargo watch -x 'run' -x 'clippy'
+	cargo watch -x 'run'

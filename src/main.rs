@@ -1,3 +1,4 @@
+mod middleware;
 mod models;
 mod schema;
 mod services;
@@ -6,6 +7,7 @@ use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     extract::Extension,
+    http::HeaderMap,
     response::{self, IntoResponse},
     routing::get,
     Router, Server,
@@ -17,9 +19,12 @@ use crate::services::new_student_service;
 
 async fn graphql_handler(
     schema: Extension<StudentsSchema>,
+    headers: HeaderMap,
     req: GraphQLRequest,
 ) -> GraphQLResponse {
-    schema.execute(req.into_inner()).await.into()
+    let mut req = req.into_inner();
+    req = req.data(middleware::AuthHeaderContainer::extract(&headers));
+    schema.execute(req).await.into()
 }
 
 async fn graphiql() -> impl IntoResponse {
@@ -37,8 +42,7 @@ async fn main() {
 
     println!("GraphiQL IDE: http://localhost:8080/graphiql");
 
-    Server::bind(&"127.0.0.1:8080".parse().unwrap())
+    let _ = Server::bind(&"127.0.0.1:8080".parse().unwrap())
         .serve(app.into_make_service())
-        .await
-        .unwrap();
+        .await;
 }
