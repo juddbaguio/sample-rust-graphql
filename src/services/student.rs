@@ -26,7 +26,7 @@ impl StudentsCtx {
     }
 
     fn seed(&mut self) {
-        let name_list = ["Judd Misael R. Baguio", "Keith Yvonne C. Saycon"];
+        let name_list = ["random name"];
         let mut db: HashMap<String, Student> = HashMap::new();
         for name in name_list {
             let key = Uuid::new_v4().to_string();
