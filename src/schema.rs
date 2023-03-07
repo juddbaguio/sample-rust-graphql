@@ -21,6 +21,7 @@ pub fn init_schema(ctx: StudentsCtx) -> StudentsSchema {
         EmptySubscription,
     )
     .extension(middleware::HeaderMiddleware)
+    .extension(middleware::AuthMiddleware)
     .data(ctx)
     .finish()
 }

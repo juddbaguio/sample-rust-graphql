@@ -23,7 +23,7 @@ async fn graphql_handler(
     req: GraphQLRequest,
 ) -> GraphQLResponse {
     let mut req = req.into_inner();
-    req = req.data(middleware::AuthHeaderContainer::extract(&headers));
+    req = req.data(headers);
     schema.execute(req).await.into()
 }
 
