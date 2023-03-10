@@ -42,8 +42,7 @@ impl Extension for HeaderMiddleware {
             return Err(ServerError::new("header key is missing", None));
         }
 
-        let result = next.run(ctx, request).await;
-        result
+        next.run(ctx, request).await
     }
 }
 
